@@ -1,11 +1,11 @@
-.inputNav {
+.inputDiv {
     margin: auto;
     margin-top: 20px;
     width: 800px;
     position: relative;
 }
 
-.inputLabel {
+.inputBoxLabel {
     display: inline;
     position: absolute;
     left: 0;
@@ -13,7 +13,7 @@
     font-weight: 400;
 }
 
-.inputNav input {
+.inputBox {
     width: 580px;
     height: 50px;
     color: #63717f;
@@ -24,4 +24,30 @@
     -moz-border-radius: 5px;
     border-radius: 5px;
     right: 0;
+}
+
+.radioInputDiv{
+    font-size: 20pt;
+    display: inline;
+}
+
+.radioInputLabel{
+    display: inline;
+    position: absolute;
+    left: 0;
+    font-size: 18pt;
+    font-weight: 400;
+}
+
+.radioInputDiv{
+    width: 580px;
+    height: 50px;
+    margin-right: 250px;
+    font-size: 22px;
+}
+
+.radioInput{
+    font-size: 18pt;
+    display: inline;
+    position: relative;
 }

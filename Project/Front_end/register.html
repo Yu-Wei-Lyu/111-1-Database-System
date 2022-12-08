@@ -32,36 +32,49 @@
             <div class="text-center mb-4">
                 <h2 class="text-center">註冊帳號</h2>
                 <hr>
-                <div class="inputNav">
-                    <div class="inputLabel">帳號</div>
-                    <input type="text" id="accountInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">密碼</div>
-                    <input type="password" id="passwordInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">確認密碼</div>
-                    <input type="password" id="confirmPasswordInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">電子郵件</div>
-                    <input type="email" id="mailInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">電話</div>
-                    <input type="text" id="phoneInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">地址</div>
-                    <input type="text" id="addressInput" placeholder="" />
-                </div>
-                <div class="inputNav">
-                    <div class="inputLabel">性別</div>
-                    <input type="radio">南</input>
-                </div>
+                <form>
+                    <div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">帳號</div>
+                            <input class="inputBox" type="text" id="accountInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">密碼</div>
+                            <input class="inputBox" type="password" id="passwordInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">確認密碼</div>
+                            <input class="inputBox" type="password" id="confirmPasswordInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">電子郵件</div>
+                            <input class="inputBox" type="email" id="mailInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">電話</div>
+                            <input class="inputBox" type="text" id="phoneInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="inputBoxLabel">地址</div>
+                            <input class="inputBox" type="text" id="addressInput" placeholder="" />
+                        </div>
+                        <div class="inputDiv">
+                            <div class="radioInputLabel">性別</div>
+                            <fieldset class="radioInputDiv">
+                                <div class = "radioInput"> 
+                                    <input type="radio" class="radioInput" name="contact" id="male" value="male">
+                                    <label for="male" >男</label>
+                                    <input type="radio" class="radioInput" name="contact" id="female" value="female">
+                                    <label for="female">女</label>
+                                    <input type="radio" class="radioInput" name="contact" id="none" value="none">
+                                    <label for="none">不願透漏</label>
+                                </div>
+                            </fieldset>
+                        </div>
+                    </div>
+                    
+                </form>
             </div>
-
         </div>
     </section>
     <!-- section end -->
