@@ -1,19 +1,27 @@
+.inputNav {
+    margin: auto;
+    margin-top: 20px;
+    width: 800px;
+    position: relative;
+}
+
 .inputLabel {
     display: inline;
-}
-
-div p {
+    position: absolute;
+    left: 0;
     font-size: 18pt;
-    padding-right: 15px;
+    font-weight: 400;
 }
 
-div input {
-    width: 400px;
+.inputNav input {
+    width: 580px;
     height: 50px;
     color: #63717f;
+    margin-left: 100px;
     font-size: 22px;
-    padding-left: 45px;
+    padding-left: 10px;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     border-radius: 5px;
+    right: 0;
 }
