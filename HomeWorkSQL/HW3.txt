@@ -1,79 +1,79 @@
-CREATE DATABASE `DBHW3`;
+CREATE DATABASE DBHW3;
 SHOW DATABASES;
-USE `DBHW3`;
+USE DBHW3;
 
-drop table if EXISTS `STUDENT`, `COURSE`, `SECTION`, `GRADE_REPORT`, `PREREQUISITE`;
-show tables;
-CREATE TABLE `STUDENT` (
-	`StudentNumber` VARCHAR(63), 
+drop table if EXISTS STUDENT, COURSE, SECTION, GRADE_REPORT, PREREQUISITE;
+
+CREATE TABLE STUDENT (
+	StudentNumber VARCHAR(63), 
     `Name` VARCHAR(63), 
-    `Class` INT, 
-    `Major` VARCHAR(63),
+    Class INT, 
+    Major VARCHAR(63),
     
-    PRIMARY KEY(`StudentNumber`)
+    PRIMARY KEY(StudentNumber)
 );
 
-CREATE TABLE `COURSE` (
-	`CourseNumber` VARCHAR(63), 
-    `CourseName` VARCHAR(63), 
-    `CreditHour` INT, 
-    `Department` VARCHAR(63),
+CREATE TABLE COURSE (
+	CourseNumber VARCHAR(63), 
+    CourseName VARCHAR(63), 
+    CreditHour INT, 
+    Department VARCHAR(63),
     
-    PRIMARY KEY(`CourseNumber`)
+    PRIMARY KEY(CourseNumber)
 );
 
-CREATE TABLE `SECTION` (
-	`SectionNumber` VARCHAR(63), 
-    `CourseNumber` VARCHAR(63), 
-    `Semester` VARCHAR(63), 
+CREATE TABLE SECTION (
+	SectionNumber VARCHAR(63), 
+    CourseNumber VARCHAR(63), 
+    Semester VARCHAR(63), 
     `Year` YEAR, 
-    `Instructor` VARCHAR(63),
+    Instructor VARCHAR(63),
     
-    PRIMARY KEY(`SectionNumber`),
-    FOREIGN KEY(`CourseNumber`) REFERENCES `COURSE`(`CourseNumber`) ON DELETE SET NULL
+    PRIMARY KEY(SectionNumber),
+    FOREIGN KEY(CourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE SET NULL
 );
 
-CREATE TABLE `GRADE_REPORT` (
-	`StudentNumber` VARCHAR(63), 
-    `SectionNumber` VARCHAR(63), 
-    `Grade` INT,
+CREATE TABLE GRADE_REPORT (
+	StudentNumber VARCHAR(63), 
+    SectionNumber VARCHAR(63), 
+    Grade INT,
     
-    PRIMARY KEY(`StudentNumber`, `SectionNumber`),
-    FOREIGN KEY(`StudentNumber`) REFERENCES `STUDENT`(`StudentNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY(`SectionNumber`) REFERENCES `SECTION`(`SectionNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY(StudentNumber, SectionNumber),
+    FOREIGN KEY(StudentNumber) REFERENCES STUDENT(StudentNumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(SectionNumber) REFERENCES SECTION(SectionNumber) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-CREATE TABLE `PREREQUISITE` (
-	`CourseNumber` VARCHAR(63), 
-	`PrerequisiteCourseNumber` VARCHAR(63),
+CREATE TABLE PREREQUISITE (
+	CourseNumber VARCHAR(63), 
+	PrerequisiteCourseNumber VARCHAR(63),
     
-    PRIMARY KEY(`CourseNumber`, `PrerequisiteCourseNumber`),
-    FOREIGN KEY(`CourseNumber`) REFERENCES `COURSE`(`CourseNumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-    FOREIGN KEY(`PrerequisiteCourseNumber`) REFERENCES `COURSE`(`CourseNumber`) ON DELETE CASCADE ON UPDATE CASCADE
+    PRIMARY KEY(CourseNumber, PrerequisiteCourseNumber),
+    FOREIGN KEY(CourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY(PrerequisiteCourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-INSERT INTO `STUDENT`
+INSERT INTO STUDENT
 VALUES 
 	('001', 'Edward', 1, 'EECS'),
 	('002', 'Breach', 2, 'CSIE'),
 	('003', 'Brimstone', 3, 'EECS'),
 	('004', 'Chamber', 1, 'CSIE');
 
-INSERT INTO `COURSE`
+INSERT INTO COURSE
 VALUES 
 	('1', 'Database Systems', 4, 'EECS'),
 	('2', 'Web Programming', 2, 'EECS'),
 	('3', 'Computer Programming', 1, 'CSIE'),
     ('4', 'Windows Programming', 2, 'CSIE');
 
-INSERT INTO `SECTION`
+INSERT INTO SECTION
 VALUES
 	('1', '1', 'Fall', 2020, 'Liu'),
     ('2', '4', 'Spring', 2021, 'Chen'),
     ('3', '2', 'Spring', 2022, 'Liu'),
     ('4', '3', 'Fall', 2022, 'Chen');
 
-INSERT INTO `GRADE_REPORT`
+INSERT INTO GRADE_REPORT
 VALUES
 	('001', '1', 90),
     ('001', '2', 70),
@@ -91,166 +91,103 @@ VALUES
     ('004', '2', 90),
     ('004', '4', 60);
 
-INSERT INTO `PREREQUISITE`
+INSERT INTO PREREQUISITE
 VALUES
 	('2', '3'),
     ('2', '4'),
     ('1', '3');
     
+show tables;
+
 /*1(a) BEGIN*/
 SELECT *
-FROM `COURSE`
-WHERE
-	`CourseName` = 'Database Systems' AND 
-	`Department` = 'EECS';
+FROM COURSE
+WHERE CourseName = 'Database Systems' 
+	AND Department = 'EECS';
     
-UPDATE `COURSE` 
-SET `CreditHour` = 3 
-WHERE 
-	`CourseName` = 'Database Systems' AND 
-	`Department` = 'EECS';
+UPDATE COURSE
+SET CreditHour = 3 
+WHERE CourseName = 'Database Systems' 
+	AND Department = 'EECS';
     
 SELECT *
-FROM `COURSE`
-WHERE
-	`CourseName` = 'Database Systems' AND 
-	`Department` = 'EECS';
+FROM COURSE
+WHERE CourseName = 'Database Systems' 
+	AND Department = 'EECS';
 /*1(a) END*/
 /*1(b) BEGIN*/
-SELECT * from `STUDENT`;
+SELECT * from STUDENT;
 
-DELETE FROM `STUDENT`
-WHERE 
-	Name = 'Edward' AND 
-	`StudentNumber` = '001';
+DELETE FROM STUDENT
+WHERE `Name` = 'Edward' 
+	AND StudentNumber = '001';
 
-SELECT * from `STUDENT`;
+SELECT * from STUDENT;
 /*1(b) END*/
 /*1(c) BEGIN*/
 
-SELECT * from `COURSE`;
-SELECT * from `SECTION`;
+SELECT * from COURSE;
+SELECT * from SECTION;
 
-SELECT `CourseName` 
-FROM `COURSE`
-WHERE 
-	`CourseNumber` IN (
-		SELECT `CourseNumber`
-		FROM `SECTION`
-		WHERE 
-			`Instructor` = 'Liu' AND 
-			`Year` IN (2020, 2022)
-	);
+SELECT CourseName
+FROM COURSE
+WHERE CourseNumber IN (
+	SELECT CourseNumber
+	FROM SECTION
+	WHERE Instructor = 'Liu' 
+		AND `Year` IN (2020, 2022)
+);
 
 /*1(c) END*/
 /*1(d) BEGIN*/
 
-SELECT `CourseNumber`, `Semester`, `Year`, COUNT(*) AS `Students`
-FROM `SECTION`, `GRADE_REPORT`
-WHERE 
-	`Instructor` = 'Liu' AND 
-	`SECTION`.`SectionNumber` = `GRADE_REPORT`.`SectionNumber`
-GROUP BY `CourseNumber`, `Semester`, `Year`;
+SELECT CourseNumber, Semester, `Year`, COUNT(*) AS Students
+FROM SECTION, GRADE_REPORT
+WHERE Instructor = 'Liu' 
+	AND SECTION.SectionNumber = GRADE_REPORT.SectionNumber
+GROUP BY CourseNumber, Semester, `Year`;
 
 /*1(d) END*/
 /*1(e) BEGIN*/
 
-SELECT `CourseNumber`, `CourseName` FROM `COURSE`;
+SELECT CourseNumber, CourseName FROM COURSE;
     
-SELECT * FROM `PREREQUISITE`;
+SELECT * FROM PREREQUISITE;
 
-SELECT `CourseNumber`, `CourseName`
-FROM `COURSE`
-WHERE     
-	`CourseNumber` IN (
-		SELECT `PrerequisiteCourseNumber`
-        FROM `PREREQUISITE`
-        WHERE
-			`CourseNumber` IN (
-				SELECT `CourseNumber`
-                FROM `COURSE`
-                WHERE
-					`CourseName` = 'Web Programming' AND
-                    `Department` = 'EECS'
-            )
-    );
+SELECT CourseNumber, CourseName
+FROM COURSE
+WHERE CourseNumber IN (
+	SELECT PrerequisiteCourseNumber
+	FROM PREREQUISITE
+	WHERE CourseNumber IN (
+		SELECT CourseNumber
+		FROM COURSE
+		WHERE CourseName = 'Web Programming' 
+			AND	Department = 'EECS'
+	)
+);
 
 /*1(e) END*/
 /*1(f) BEGIN*/
 
-SELECT `Name`, `COURSE`.`CourseNumber`, `CourseName`, `CreditHour`, `Semester`, `Year`, `Grade`
-FROM `STUDENT`
-LEFT JOIN `GRADE_REPORT` 
-ON `STUDENT`.`StudentNumber` = `GRADE_REPORT`.`StudentNumber`
-LEFT JOIN `SECTION` 
-ON `GRADE_REPORT`.`SectionNumber` = `SECTION`.`SectionNumber`
-LEFT JOIN `COURSE`
-ON `SECTION`.`CourseNumber` = `COURSE`.`CourseNumber`
-WHERE
-	`Class` = 3;
-
-SELECT `Name`, `COURSE`.`CourseNumber`, `CourseName`, `CreditHour`, `Semester`, `Year`, `Grade`
-FROM `STUDENT`, `COURSE`, `SECTION`, `GRADE_REPORT` 
-WHERE 
-	`Class` = 3 AND
-	`GRADE_REPORT`.`StudentNumber` = 3 AND
-    `SECTION`.`SectionNumber` = `GRADE_REPORT`.`SectionNumber` AND
-    `COURSE`.`CourseNumber` = `SECTION`.`CourseNumber`;
-
-SELECT `Name`
-FROM `STUDENT`
-WHERE 
-	`Class` = 3;
+SELECT `Name`, COURSE.CourseNumber, CourseName, CreditHour, Semester, `Year`, Grade
+FROM STUDENT
+INNER JOIN GRADE_REPORT 
+	ON STUDENT.StudentNumber = GRADE_REPORT.StudentNumber
+INNER JOIN SECTION 
+	ON GRADE_REPORT.SectionNumber = SECTION.SectionNumber
+INNER JOIN COURSE
+	ON SECTION.CourseNumber = COURSE.CourseNumber
+WHERE Class = 3;
     
-
-    
-SELECT `Grade`
-FROM `GRADE_REPORT`
-WHERE 
-	`StudentNumber` IN (
-		SELECT `StudentNumber`
-        FROM `STUDENT`
-        WHERE
-			`Class` = 3
-	);
-
-SELECT `Semester`, `Year`
-FROM `SECTION`
-WHERE
-	`SectionNumber` IN (
-		SELECT `SectionNumber`
-		FROM `GRADE_REPORT`
-		WHERE 
-			`StudentNumber` IN (
-				SELECT `StudentNumber`
-				FROM `STUDENT`
-				WHERE
-					`Class` = 3
-			)
-    );
-
-SELECT `CourseNumber`, `CourseName`, `CreditHour`
-FROM `COURSE`
-WHERE 
-	`CourseNumber` IN (
-		SELECT `CourseNumber`
-		FROM `SECTION`
-		WHERE
-			`SectionNumber` IN (
-				SELECT `SectionNumber`
-				FROM `GRADE_REPORT`
-				WHERE 
-					`StudentNumber` IN (
-						SELECT `StudentNumber`
-						FROM `STUDENT`
-						WHERE
-							`Class` = 3
-					)
-			)
-    );
-
 /*1(f) END*/
 /*1(g) BEGIN*/
+
+SELECT *
+FROM STUDENT
+INNER JOIN GRADE_REPORT
+	ON STUDENT.StudentNumber = GRADE_REPORT.StudentNumber;
+	
 /*1(g) END*/
 /*1(h) BEGIN*/
 /*1(h) END*/
