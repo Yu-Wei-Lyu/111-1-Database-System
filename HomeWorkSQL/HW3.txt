@@ -189,6 +189,66 @@ ON `SECTION`.`CourseNumber` = `COURSE`.`CourseNumber`
 WHERE
 	`Class` = 3;
 
+SELECT `Name`, `COURSE`.`CourseNumber`, `CourseName`, `CreditHour`, `Semester`, `Year`, `Grade`
+FROM `STUDENT`, `COURSE`, `SECTION`, `GRADE_REPORT` 
+WHERE 
+	`Class` = 3 AND
+	`GRADE_REPORT`.`StudentNumber` = 3 AND
+    `SECTION`.`SectionNumber` = `GRADE_REPORT`.`SectionNumber` AND
+    `COURSE`.`CourseNumber` = `SECTION`.`CourseNumber`;
+
+SELECT `Name`
+FROM `STUDENT`
+WHERE 
+	`Class` = 3;
+    
+
+    
+SELECT `Grade`
+FROM `GRADE_REPORT`
+WHERE 
+	`StudentNumber` IN (
+		SELECT `StudentNumber`
+        FROM `STUDENT`
+        WHERE
+			`Class` = 3
+	);
+
+SELECT `Semester`, `Year`
+FROM `SECTION`
+WHERE
+	`SectionNumber` IN (
+		SELECT `SectionNumber`
+		FROM `GRADE_REPORT`
+		WHERE 
+			`StudentNumber` IN (
+				SELECT `StudentNumber`
+				FROM `STUDENT`
+				WHERE
+					`Class` = 3
+			)
+    );
+
+SELECT `CourseNumber`, `CourseName`, `CreditHour`
+FROM `COURSE`
+WHERE 
+	`CourseNumber` IN (
+		SELECT `CourseNumber`
+		FROM `SECTION`
+		WHERE
+			`SectionNumber` IN (
+				SELECT `SectionNumber`
+				FROM `GRADE_REPORT`
+				WHERE 
+					`StudentNumber` IN (
+						SELECT `StudentNumber`
+						FROM `STUDENT`
+						WHERE
+							`Class` = 3
+					)
+			)
+    );
+
 /*1(f) END*/
 /*1(g) BEGIN*/
 /*1(g) END*/
