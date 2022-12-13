@@ -3,7 +3,7 @@ SHOW DATABASES;
 USE `DBHW3`;
 
 drop table if EXISTS `STUDENT`, `COURSE`, `SECTION`, `GRADE_REPORT`, `PREREQUISITE`;
-
+show tables;
 CREATE TABLE `STUDENT` (
 	`StudentNumber` VARCHAR(63), 
     `Name` VARCHAR(63), 
@@ -69,7 +69,7 @@ VALUES
 INSERT INTO `SECTION`
 VALUES
 	('1', '1', 'Fall', 2020, 'Liu'),
-    ('2', '1', 'Fall', 2020, 'Chen'),
+    ('2', '4', 'Spring', 2021, 'Chen'),
     ('3', '2', 'Spring', 2022, 'Liu'),
     ('4', '3', 'Fall', 2022, 'Chen');
 
@@ -89,7 +89,6 @@ VALUES
     ('003', '4', 40),
 	('004', '1', 90),
     ('004', '2', 90),
-    ('004', '3', 90),
     ('004', '4', 60);
 
 INSERT INTO `PREREQUISITE`
@@ -128,6 +127,7 @@ WHERE
 SELECT * from `STUDENT`;
 /*1(b) END*/
 /*1(c) BEGIN*/
+
 SELECT * from `COURSE`;
 SELECT * from `SECTION`;
 
@@ -135,19 +135,60 @@ SELECT `CourseName`
 FROM `COURSE`
 WHERE 
 	`CourseNumber` IN (
-	SELECT `CourseNumber`
-	FROM `SECTION`
-	WHERE 
-		`Instructor` = 'Liu' AND 
-		`Year` IN (2020, 2022)
+		SELECT `CourseNumber`
+		FROM `SECTION`
+		WHERE 
+			`Instructor` = 'Liu' AND 
+			`Year` IN (2020, 2022)
 	);
 
 /*1(c) END*/
 /*1(d) BEGIN*/
+
+SELECT `CourseNumber`, `Semester`, `Year`, COUNT(*) AS `Students`
+FROM `SECTION`, `GRADE_REPORT`
+WHERE 
+	`Instructor` = 'Liu' AND 
+	`SECTION`.`SectionNumber` = `GRADE_REPORT`.`SectionNumber`
+GROUP BY `CourseNumber`, `Semester`, `Year`;
+
 /*1(d) END*/
 /*1(e) BEGIN*/
+
+SELECT `CourseNumber`, `CourseName` FROM `COURSE`;
+    
+SELECT * FROM `PREREQUISITE`;
+
+SELECT `CourseNumber`, `CourseName`
+FROM `COURSE`
+WHERE     
+	`CourseNumber` IN (
+		SELECT `PrerequisiteCourseNumber`
+        FROM `PREREQUISITE`
+        WHERE
+			`CourseNumber` IN (
+				SELECT `CourseNumber`
+                FROM `COURSE`
+                WHERE
+					`CourseName` = 'Web Programming' AND
+                    `Department` = 'EECS'
+            )
+    );
+
 /*1(e) END*/
 /*1(f) BEGIN*/
+
+SELECT `Name`, `COURSE`.`CourseNumber`, `CourseName`, `CreditHour`, `Semester`, `Year`, `Grade`
+FROM `STUDENT`
+LEFT JOIN `GRADE_REPORT` 
+ON `STUDENT`.`StudentNumber` = `GRADE_REPORT`.`StudentNumber`
+LEFT JOIN `SECTION` 
+ON `GRADE_REPORT`.`SectionNumber` = `SECTION`.`SectionNumber`
+LEFT JOIN `COURSE`
+ON `SECTION`.`CourseNumber` = `COURSE`.`CourseNumber`
+WHERE
+	`Class` = 3;
+
 /*1(f) END*/
 /*1(g) BEGIN*/
 /*1(g) END*/
