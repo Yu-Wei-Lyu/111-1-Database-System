@@ -80,8 +80,8 @@ VALUES
     ('001', '3', 80),
     ('001', '4', 100),
 	('002', '1', 60),
-    ('002', '2', 50),
-    ('002', '3', 50),
+    ('002', '2', 60),
+    ('002', '3', 60),
     ('002', '4', 70),
 	('003', '1', 70),
     ('003', '2', 50),
@@ -154,7 +154,16 @@ SELECT CourseNumber, CourseName FROM COURSE;
     
 SELECT * FROM PREREQUISITE;
 
-SELECT CourseNumber, CourseName
+SELECT PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName
+FROM COURSE
+INNER JOIN PREREQUISITE
+	ON PREREQUISITE.CourseNumber = COURSE.CourseNumber
+INNER JOIN COURSE AS PRECOURSE
+	ON PREREQUISITE.PrerequisiteCourseNumber = PRECOURSE.CourseNumber
+WHERE COURSE.CourseName = 'Web Programming' 
+	AND	COURSE.Department = 'EECS';
+    
+/*SELECT CourseNumber, CourseName
 FROM COURSE
 WHERE CourseNumber IN (
 	SELECT PrerequisiteCourseNumber
@@ -165,7 +174,7 @@ WHERE CourseNumber IN (
 		WHERE CourseName = 'Web Programming' 
 			AND	Department = 'EECS'
 	)
-);
+);*/
 
 /*1(e) END*/
 /*1(f) BEGIN*/
@@ -183,13 +192,36 @@ WHERE Class = 3;
 /*1(f) END*/
 /*1(g) BEGIN*/
 
-SELECT *
+SELECT `Name`, SectionNumber, Grade
 FROM STUDENT
-INNER JOIN GRADE_REPORT
-	ON STUDENT.StudentNumber = GRADE_REPORT.StudentNumber;
-	
+INNER JOIN GRADE_REPORT AS GR
+	ON GR.StudentNumber = STUDENT.StudentNumber;
+
+SELECT `Name`
+FROM STUDENT
+WHERE StudentNumber IN (
+	SELECT StudentNumber
+    FROM GRADE_REPORT
+    WHERE
+		Grade >= 80
+);
 /*1(g) END*/
 /*1(h) BEGIN*/
+
+SELECT `Name`, SectionNumber, Grade
+FROM STUDENT
+INNER JOIN GRADE_REPORT AS GR
+	ON GR.StudentNumber = STUDENT.StudentNumber;
+    
+SELECT `Name`, Major
+FROM STUDENT AS ST
+WHERE EXISTS (
+	SELECT StudentNumber
+    FROM GRADE_REPORT
+    WHERE
+		Grade < 60
+);
+
 /*1(h) END*/
 /*1(i) BEGIN*/
 /*1(i) END*/
