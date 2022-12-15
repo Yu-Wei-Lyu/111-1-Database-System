@@ -254,7 +254,7 @@ INNER JOIN SECTION AS SEC
 WHERE `Year` = 2022
 ORDER BY `Name` ASC;
 
-SELECT `Name`, SUM(Grade)/COUNT(*) as AverageGrade 
+SELECT `Name`, AVG(Grade) as AverageGrade 
 FROM GRADE_REPORT AS GR
 INNER JOIN STUDENT AS ST
 	ON ST.StudentNumber = GR.StudentNumber
@@ -267,6 +267,18 @@ GROUP BY ST.StudentNumber HAVING AverageGrade > 80;
 
 /*1(j) END*/
 /*1(k) BEGIN*/
+
+SELECT *
+FROM SECTION AS SEC
+INNER JOIN GRADE_REPORT AS GR
+	ON SEC.SectionNumber = GR.SectionNumber
+WHERE Instructor = 'Liu' ;
+
+SELECT *
+FROM GRADE_REPORT AS GR
+INNER JOIN STUDENT AS ST
+	ON ST.StudentNumber = GR.StudentNumber
+GROUP BY Major, ST.StudentNumber HAVING AVG(Grade) >= 60;
 /*1(k) END*/
 /*1(l) BEGIN*/
 /*1(l) END*/
