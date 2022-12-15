@@ -56,7 +56,7 @@ INSERT INTO STUDENT
 VALUES 
 	('001', 'Edward', 1, 'EECS'),
 	('002', 'Breach', 2, 'CSIE'),
-	('003', 'Brimstone', 3, 'EECS'),
+    ('003', 'Brimstone', 3, 'EECS'),
 	('004', 'Chamber', 1, 'CSIE');
 
 INSERT INTO COURSE
@@ -81,7 +81,7 @@ VALUES
     ('001', '4', 100),
 	('002', '1', 60),
     ('002', '2', 60),
-    ('002', '3', 60),
+    ('002', '3', 50),
     ('002', '4', 70),
 	('003', '1', 70),
     ('003', '2', 50),
@@ -89,7 +89,8 @@ VALUES
     ('003', '4', 40),
 	('004', '1', 90),
     ('004', '2', 90),
-    ('004', '4', 60);
+    ('004', '3', 90),
+    ('004', '4', 100);
 
 INSERT INTO PREREQUISITE
 VALUES
@@ -126,8 +127,10 @@ SELECT * from STUDENT;
 /*1(b) END*/
 /*1(c) BEGIN*/
 
-SELECT * from COURSE;
-SELECT * from SECTION;
+SELECT COUR.CourseName, `Year`, Instructor
+FROM COURSE AS COUR
+INNER JOIN SECTION AS SEC
+	ON COUR.CourseNumber = SEC.CourseNumber;
 
 SELECT CourseName
 FROM COURSE
@@ -141,19 +144,30 @@ WHERE CourseNumber IN (
 /*1(c) END*/
 /*1(d) BEGIN*/
 
-SELECT CourseNumber, Semester, `Year`, COUNT(*) AS Students
-FROM SECTION, GRADE_REPORT
+SELECT StudentNumber, CourseNumber, Semester, `Year`, Instructor
+FROM SECTION AS SEC
+INNER JOIN GRADE_REPORT AS GR
+	ON SEC.SectionNumber = GR.SectionNumber
 WHERE Instructor = 'Liu' 
-	AND SECTION.SectionNumber = GRADE_REPORT.SectionNumber
+ORDER BY Instructor ASC;
+
+SELECT CourseNumber, Semester, `Year`, COUNT(*) AS Students
+FROM SECTION AS SEC
+INNER JOIN GRADE_REPORT AS GR
+	ON SEC.SectionNumber = GR.SectionNumber
+WHERE Instructor = 'Liu' 
 GROUP BY CourseNumber, Semester, `Year`;
 
 /*1(d) END*/
 /*1(e) BEGIN*/
 
-SELECT CourseNumber, CourseName FROM COURSE;
+SELECT COURSE.CourseNumber, COURSE.CourseName, PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName AS PrerequisiteCourseName
+FROM COURSE
+INNER JOIN PREREQUISITE
+	ON PREREQUISITE.CourseNumber = COURSE.CourseNumber
+INNER JOIN COURSE AS PRECOURSE
+	ON PREREQUISITE.PrerequisiteCourseNumber = PRECOURSE.CourseNumber;
     
-SELECT * FROM PREREQUISITE;
-
 SELECT PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName
 FROM COURSE
 INNER JOIN PREREQUISITE
@@ -162,19 +176,6 @@ INNER JOIN COURSE AS PRECOURSE
 	ON PREREQUISITE.PrerequisiteCourseNumber = PRECOURSE.CourseNumber
 WHERE COURSE.CourseName = 'Web Programming' 
 	AND	COURSE.Department = 'EECS';
-    
-/*SELECT CourseNumber, CourseName
-FROM COURSE
-WHERE CourseNumber IN (
-	SELECT PrerequisiteCourseNumber
-	FROM PREREQUISITE
-	WHERE CourseNumber IN (
-		SELECT CourseNumber
-		FROM COURSE
-		WHERE CourseName = 'Web Programming' 
-			AND	Department = 'EECS'
-	)
-);*/
 
 /*1(e) END*/
 /*1(f) BEGIN*/
@@ -205,6 +206,7 @@ WHERE StudentNumber IN (
     WHERE
 		Grade >= 80
 );
+
 /*1(g) END*/
 /*1(h) BEGIN*/
 
@@ -215,17 +217,54 @@ INNER JOIN GRADE_REPORT AS GR
     
 SELECT `Name`, Major
 FROM STUDENT AS ST
-WHERE EXISTS (
+WHERE NOT EXISTS (
 	SELECT StudentNumber
-    FROM GRADE_REPORT
-    WHERE
-		Grade < 60
+    FROM GRADE_REPORT AS GR
+    WHERE ST.StudentNumber = GR.StudentNumber 
+        AND Grade < 60
 );
 
 /*1(h) END*/
 /*1(i) BEGIN*/
+
+SELECT ST.StudentNumber, `Name`, SectionNumber, Grade
+FROM STUDENT AS ST
+INNER JOIN GRADE_REPORT AS GR
+	ON GR.StudentNumber = ST.StudentNumber;
+
+SELECT `Name`, Major
+FROM STUDENT AS ST
+WHERE EXISTS (
+	SELECT StudentNumber
+    FROM GRADE_REPORT AS GR
+    WHERE ST.StudentNumber = GR.StudentNumber 
+        AND Grade < 60
+)
+ORDER BY ST.StudentNumber ASC;
+
 /*1(i) END*/
 /*1(j) BEGIN*/
+
+SELECT `Name`, SEC.SectionNumber, Grade, `Year`
+FROM STUDENT AS ST
+INNER JOIN GRADE_REPORT AS GR
+	ON GR.StudentNumber = ST.StudentNumber
+INNER JOIN SECTION AS SEC
+	ON SEC.SectionNumber = GR.SectionNumber
+WHERE `Year` = 2022
+ORDER BY `Name` ASC;
+
+SELECT `Name`, SUM(Grade)/COUNT(*) as AverageGrade 
+FROM GRADE_REPORT AS GR
+INNER JOIN STUDENT AS ST
+	ON ST.StudentNumber = GR.StudentNumber
+WHERE SectionNumber IN (
+	SELECT SectionNumber
+	FROM SECTION AS SEC
+	WHERE `Year` = 2022
+)
+GROUP BY ST.StudentNumber HAVING AverageGrade > 80;
+
 /*1(j) END*/
 /*1(k) BEGIN*/
 /*1(k) END*/
