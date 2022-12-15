@@ -12,6 +12,7 @@ CREATE TABLE STUDENT (
     
     PRIMARY KEY(StudentNumber)
 );
+DESCRIBE STUDENT;
 
 CREATE TABLE COURSE (
 	CourseNumber VARCHAR(63), 
@@ -21,6 +22,7 @@ CREATE TABLE COURSE (
     
     PRIMARY KEY(CourseNumber)
 );
+DESCRIBE COURSE;
 
 CREATE TABLE SECTION (
 	SectionNumber VARCHAR(63), 
@@ -32,6 +34,7 @@ CREATE TABLE SECTION (
     PRIMARY KEY(SectionNumber),
     FOREIGN KEY(CourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE SET NULL
 );
+DESCRIBE SECTION;
 
 CREATE TABLE GRADE_REPORT (
 	StudentNumber VARCHAR(63), 
@@ -42,6 +45,7 @@ CREATE TABLE GRADE_REPORT (
     FOREIGN KEY(StudentNumber) REFERENCES STUDENT(StudentNumber) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(SectionNumber) REFERENCES SECTION(SectionNumber) ON DELETE CASCADE ON UPDATE CASCADE
 );
+DESCRIBE GRADE_REPORT;
 
 CREATE TABLE PREREQUISITE (
 	CourseNumber VARCHAR(63), 
@@ -51,13 +55,17 @@ CREATE TABLE PREREQUISITE (
     FOREIGN KEY(CourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE CASCADE ON UPDATE CASCADE,
     FOREIGN KEY(PrerequisiteCourseNumber) REFERENCES COURSE(CourseNumber) ON DELETE CASCADE ON UPDATE CASCADE
 );
+DESCRIBE PREREQUISITE;
 
 INSERT INTO STUDENT
 VALUES 
 	('001', 'Edward', 1, 'EECS'),
 	('002', 'Breach', 2, 'CSIE'),
     ('003', 'Brimstone', 3, 'EECS'),
-	('004', 'Chamber', 1, 'CSIE');
+	('004', 'Chamber', 1, 'CSIE'),
+    ('005', 'Cypher', 2, 'CSIE'),
+    ('006', 'Fade', 3, 'EECS');
+SELECT * FROM STUDENT;
 
 INSERT INTO COURSE
 VALUES 
@@ -65,6 +73,7 @@ VALUES
 	('2', 'Web Programming', 2, 'EECS'),
 	('3', 'Computer Programming', 1, 'CSIE'),
     ('4', 'Windows Programming', 2, 'CSIE');
+SELECT * FROM COURSE;
 
 INSERT INTO SECTION
 VALUES
@@ -72,6 +81,7 @@ VALUES
     ('2', '4', 'Spring', 2021, 'Chen'),
     ('3', '2', 'Spring', 2022, 'Liu'),
     ('4', '3', 'Fall', 2022, 'Chen');
+SELECT * FROM SECTION;
 
 INSERT INTO GRADE_REPORT
 VALUES
@@ -90,14 +100,23 @@ VALUES
 	('004', '1', 90),
     ('004', '2', 90),
     ('004', '3', 90),
-    ('004', '4', 100);
+    ('004', '4', 100),
+	('005', '1', 60),
+    ('005', '2', 45),
+    ('005', '4', 60),
+	('006', '1', 10),
+    ('006', '2', 40),
+    ('006', '3', 45),
+    ('006', '4', 30);
+SELECT * FROM GRADE_REPORT;
 
 INSERT INTO PREREQUISITE
 VALUES
 	('2', '3'),
     ('2', '4'),
     ('1', '3');
-    
+SELECT * FROM PREREQUISITE;
+
 show tables;
 
 /*1(a) BEGIN*/
@@ -129,8 +148,7 @@ SELECT * from STUDENT;
 
 SELECT COUR.CourseName, `Year`, Instructor
 FROM COURSE AS COUR
-INNER JOIN SECTION AS SEC
-	ON COUR.CourseNumber = SEC.CourseNumber;
+INNER JOIN SECTION AS SEC USING(CourseNumber);
 
 SELECT CourseName
 FROM COURSE
@@ -146,15 +164,13 @@ WHERE CourseNumber IN (
 
 SELECT StudentNumber, CourseNumber, Semester, `Year`, Instructor
 FROM SECTION AS SEC
-INNER JOIN GRADE_REPORT AS GR
-	ON SEC.SectionNumber = GR.SectionNumber
+INNER JOIN GRADE_REPORT AS GR USING(SectionNumber)
 WHERE Instructor = 'Liu' 
 ORDER BY Instructor ASC;
 
 SELECT CourseNumber, Semester, `Year`, COUNT(*) AS Students
 FROM SECTION AS SEC
-INNER JOIN GRADE_REPORT AS GR
-	ON SEC.SectionNumber = GR.SectionNumber
+INNER JOIN GRADE_REPORT AS GR USING(SectionNumber)
 WHERE Instructor = 'Liu' 
 GROUP BY CourseNumber, Semester, `Year`;
 
@@ -163,15 +179,13 @@ GROUP BY CourseNumber, Semester, `Year`;
 
 SELECT COURSE.CourseNumber, COURSE.CourseName, PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName AS PrerequisiteCourseName
 FROM COURSE
-INNER JOIN PREREQUISITE
-	ON PREREQUISITE.CourseNumber = COURSE.CourseNumber
+INNER JOIN PREREQUISITE USING(CourseNumber)
 INNER JOIN COURSE AS PRECOURSE
 	ON PREREQUISITE.PrerequisiteCourseNumber = PRECOURSE.CourseNumber;
     
-SELECT PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName
+SELECT PREREQUISITE.PrerequisiteCourseNumber, PRECOURSE.CourseName AS PrerequisiteCourseName
 FROM COURSE
-INNER JOIN PREREQUISITE
-	ON PREREQUISITE.CourseNumber = COURSE.CourseNumber
+INNER JOIN PREREQUISITE USING(CourseNumber)
 INNER JOIN COURSE AS PRECOURSE
 	ON PREREQUISITE.PrerequisiteCourseNumber = PRECOURSE.CourseNumber
 WHERE COURSE.CourseName = 'Web Programming' 
@@ -182,12 +196,9 @@ WHERE COURSE.CourseName = 'Web Programming'
 
 SELECT `Name`, COURSE.CourseNumber, CourseName, CreditHour, Semester, `Year`, Grade
 FROM STUDENT
-INNER JOIN GRADE_REPORT 
-	ON STUDENT.StudentNumber = GRADE_REPORT.StudentNumber
-INNER JOIN SECTION 
-	ON GRADE_REPORT.SectionNumber = SECTION.SectionNumber
-INNER JOIN COURSE
-	ON SECTION.CourseNumber = COURSE.CourseNumber
+INNER JOIN GRADE_REPORT USING(StudentNumber)
+INNER JOIN SECTION USING(SectionNumber)
+INNER JOIN COURSE USING(CourseNumber)
 WHERE Class = 3;
     
 /*1(f) END*/
@@ -195,8 +206,7 @@ WHERE Class = 3;
 
 SELECT `Name`, SectionNumber, Grade
 FROM STUDENT
-INNER JOIN GRADE_REPORT AS GR
-	ON GR.StudentNumber = STUDENT.StudentNumber;
+INNER JOIN GRADE_REPORT AS GR USING(StudentNumber);
 
 SELECT `Name`
 FROM STUDENT
@@ -212,8 +222,7 @@ WHERE StudentNumber IN (
 
 SELECT `Name`, SectionNumber, Grade
 FROM STUDENT
-INNER JOIN GRADE_REPORT AS GR
-	ON GR.StudentNumber = STUDENT.StudentNumber;
+INNER JOIN GRADE_REPORT AS GR USING(StudentNumber);
     
 SELECT `Name`, Major
 FROM STUDENT AS ST
@@ -229,8 +238,7 @@ WHERE NOT EXISTS (
 
 SELECT ST.StudentNumber, `Name`, SectionNumber, Grade
 FROM STUDENT AS ST
-INNER JOIN GRADE_REPORT AS GR
-	ON GR.StudentNumber = ST.StudentNumber;
+INNER JOIN GRADE_REPORT AS GR USING(StudentNumber);
 
 SELECT `Name`, Major
 FROM STUDENT AS ST
@@ -245,43 +253,76 @@ ORDER BY ST.StudentNumber ASC;
 /*1(i) END*/
 /*1(j) BEGIN*/
 
-SELECT `Name`, SEC.SectionNumber, Grade, `Year`
+SELECT `Name`, SEC.SectionNumber, AVG(Grade), `Year`
 FROM STUDENT AS ST
-INNER JOIN GRADE_REPORT AS GR
-	ON GR.StudentNumber = ST.StudentNumber
-INNER JOIN SECTION AS SEC
-	ON SEC.SectionNumber = GR.SectionNumber
+INNER JOIN GRADE_REPORT AS GR USING(StudentNumber)
+INNER JOIN SECTION AS SEC USING(SectionNumber)
 WHERE `Year` = 2022
+GROUP BY ST.StudentNumber
 ORDER BY `Name` ASC;
 
 SELECT `Name`, AVG(Grade) as AverageGrade 
 FROM GRADE_REPORT AS GR
-INNER JOIN STUDENT AS ST
-	ON ST.StudentNumber = GR.StudentNumber
-WHERE SectionNumber IN (
-	SELECT SectionNumber
-	FROM SECTION AS SEC
-	WHERE `Year` = 2022
-)
+INNER JOIN STUDENT AS ST USING(StudentNumber)
+INNER JOIN SECTION AS SEC USING(SectionNumber)
+WHERE `Year` = 2022
 GROUP BY ST.StudentNumber HAVING AverageGrade > 80;
 
 /*1(j) END*/
 /*1(k) BEGIN*/
 
-SELECT *
-FROM SECTION AS SEC
-INNER JOIN GRADE_REPORT AS GR
-	ON SEC.SectionNumber = GR.SectionNumber
-WHERE Instructor = 'Liu' ;
+SELECT ST.StudentNumber, Major, AVG(Grade)
+FROM STUDENT AS ST
+INNER JOIN GRADE_REPORT AS GR USING(StudentNumber)
+GROUP BY StudentNumber;
 
-SELECT *
-FROM GRADE_REPORT AS GR
-INNER JOIN STUDENT AS ST
-	ON ST.StudentNumber = GR.StudentNumber
-GROUP BY Major, ST.StudentNumber HAVING AVG(Grade) >= 60;
+SELECT Major, COUNT(*)
+FROM (
+	SELECT Major, AVG(Grade) AS AverageGrade
+	FROM GRADE_REPORT AS GR
+	INNER JOIN STUDENT AS ST USING(StudentNumber)
+	GROUP BY Major, ST.StudentNumber HAVING AverageGrade < 60
+) AVGTABLE
+GROUP BY Major;
+
 /*1(k) END*/
 /*1(l) BEGIN*/
+DROP VIEW STUDENT_INFO_VIEW;
+CREATE VIEW STUDENT_INFO_VIEW
+AS 
+	SELECT StudentNumber, `Name`, CourseName, Semester, `Year`, Grade
+	FROM STUDENT
+	INNER JOIN GRADE_REPORT USING(StudentNumber)
+	INNER JOIN SECTION USING(SectionNumber)
+	INNER JOIN COURSE USING(CourseNumber);
+
+SELECT * FROM STUDENT_INFO_VIEW;
 /*1(l) END*/
+
+/*2(d) BEGIN*/
+DROP PROCEDURE IF EXISTS StudentPassOrNot;
+
+DELIMITER $$
+CREATE PROCEDURE StudentPassOrNot(IN `StudentNumber` VARCHAR(63))
+BEGIN
+    SELECT AVG(Grade),
+    CASE
+        WHEN AVG(Grade) >= 60 THEN "PASS"
+        WHEN AVG(Grade) < 60 THEN "FAIL"
+    END AS PassOrFail
+    FROM STUDENT ST
+    INNER JOIN GRADE_REPORT G USING(StudentNumber)
+    WHERE `StudentNumber` = ST.StudentNumber;
+END$$
+DELIMITER ;
+
+CALL StudentPassOrNot('002');
+CALL StudentPassOrNot('003');
+CALL StudentPassOrNot('004');
+CALL StudentPassOrNot('005');
+CALL StudentPassOrNot('006');
+
+/*2(d) END*/
 
 DESCRIBE STUDENT;
 DESCRIBE COURSE;
