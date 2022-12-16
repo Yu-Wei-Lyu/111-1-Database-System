@@ -1,7 +1,7 @@
 .inputDiv {
     margin: auto;
     margin-top: 20px;
-    width: 800px;
+    width: 750px;
     position: relative;
 }
 
@@ -26,12 +26,12 @@
     right: 0;
 }
 
-.radioInputDiv{
+.radioInputDiv {
     font-size: 20pt;
     display: inline;
 }
 
-.radioInputLabel{
+.radioInputLabel {
     display: inline;
     position: absolute;
     left: 0;
@@ -39,15 +39,29 @@
     font-weight: 400;
 }
 
-.radioInputDiv{
+.radioInputDiv {
     width: 580px;
     height: 50px;
     margin-right: 250px;
     font-size: 22px;
 }
 
-.radioInput{
+.radioInput {
     font-size: 18pt;
     display: inline;
     position: relative;
+}
+
+.necessaryInputLabel {
+    display: inline;
+    color: red;
+}
+
+.submitDiv {
+    margin: auto;
+    width: 670px;
+}
+
+.submitButton {
+    margin-right: -90%;
 }

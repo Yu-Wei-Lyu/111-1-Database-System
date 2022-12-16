@@ -33,46 +33,59 @@
                 <h2 class="text-center">註冊帳號</h2>
                 <hr>
                 <form>
-                    <div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">帳號</div>
-                            <input class="inputBox" type="text" id="accountInput" placeholder="" />
+                    <div class="inputDiv">
+
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>帳號
                         </div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">密碼</div>
-                            <input class="inputBox" type="password" id="passwordInput" placeholder="" />
-                        </div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">確認密碼</div>
-                            <input class="inputBox" type="password" id="confirmPasswordInput" placeholder="" />
-                        </div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">電子郵件</div>
-                            <input class="inputBox" type="email" id="mailInput" placeholder="" />
-                        </div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">電話</div>
-                            <input class="inputBox" type="text" id="phoneInput" placeholder="" />
-                        </div>
-                        <div class="inputDiv">
-                            <div class="inputBoxLabel">地址</div>
-                            <input class="inputBox" type="text" id="addressInput" placeholder="" />
-                        </div>
-                        <div class="inputDiv">
-                            <div class="radioInputLabel">性別</div>
-                            <fieldset class="radioInputDiv">
-                                <div class = "radioInput"> 
-                                    <input type="radio" class="radioInput" name="contact" id="male" value="male">
-                                    <label for="male" >男</label>
-                                    <input type="radio" class="radioInput" name="contact" id="female" value="female">
-                                    <label for="female">女</label>
-                                    <input type="radio" class="radioInput" name="contact" id="none" value="none">
-                                    <label for="none">不願透漏</label>
-                                </div>
-                            </fieldset>
-                        </div>
+                        <input class="inputBox" type="text" id="accountInput" placeholder="" autofocus/>
                     </div>
-                    
+                    <div class="inputDiv">
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>密碼
+                        </div>
+                        <input class="inputBox" type="password" id="passwordInput" placeholder="" />
+                    </div>
+                    <div class="inputDiv">
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>確認密碼
+                        </div>
+                        <input class="inputBox" type="password" id="confirmPasswordInput" placeholder="" />
+                    </div>
+                    <div class="inputDiv">
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>電子郵件</div>
+                        <input class="inputBox" type="email" id="mailInput" placeholder="" />
+                    </div>
+                    <div class="inputDiv">
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>電話
+                        </div>
+                        <input class="inputBox" type="text" id="phoneInput" placeholder="" />
+                    </div>
+                    <div class="inputDiv">
+                        <div class="inputBoxLabel">
+                            <p class="necessaryInputLabel">*</p>地址
+                        </div>
+                        <input class="inputBox" type="text" id="addressInput" placeholder="" />
+                    </div>
+                    <div class="inputDiv">
+                        <div class="radioInputLabel">性別</div>
+                        <fieldset class="radioInputDiv">
+                            <div class="radioInput">
+                                <input type="radio" class="radioInput" name="contact" id="male" value="male">
+                                <label for="male">男</label>
+                                <input type="radio" class="radioInput" name="contact" id="female" value="female">
+                                <label for="female">女</label>
+                                <input type="radio" class="radioInput" name="contact" id="none" value="none" checked>
+                                <label for="none">不願透漏</label>
+                            </div>
+                        </fieldset>
+                    </div>
+                    <div class="submitDiv">
+                        <input class="submitButton" type="submit" value="送出資料">
+                    </div>
+
                 </form>
             </div>
         </div>
